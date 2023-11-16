@@ -279,6 +279,21 @@ class Categoria:
                       "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
                       "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z", "-", "0", "1", "2", "3", "4", "5",
                       "6", "7", "8", "9"]
+        reservadas2 = ["SI"]
+        reservadas3 = ["ENT", "VAR", "CAD"]
+        reservadas4 = ["BOOL", "FUNC"]
+        if len(cadena) == 2:
+            for c in reservadas2:
+                if c == cadena:
+                    return False
+        if len(cadena) == 3:
+            for c in reservadas3:
+                if c == cadena:
+                    return False
+        if len(cadena) == 4:
+            for c in reservadas4:
+                if c == cadena:
+                    return False
         for i in range(len(cadena)):
             esDigito = False
             if contador >= 10:
