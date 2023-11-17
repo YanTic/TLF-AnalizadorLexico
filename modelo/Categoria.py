@@ -198,17 +198,13 @@ class Categoria:
         return False
 
     def esComentario(cadena):
-        opcion = 0
-        if cadena[0] == '/':
-            if cadena[-1] == '/' and cadena[-2] == '*' and len(cadena) >= 4:
-                opcion = 1
+        contenidoBloque = cadena[2:-1]
+        if cadena.startswith("//") and cadena.endswith("\n"):
+            return "/" not in contenidoBloque
+        elif cadena.startswith("/*") and cadena.endswith("*/"):
+            return "/" not in contenidoBloque
         else:
             return False
-        if cadena[1] == '/' and opcion == 0:
-            return True
-        elif cadena[1] == '*' and opcion == 1:
-            return True
-        return False
 
         def esHexadecimal(cadena):
             hexadecimal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
@@ -309,14 +305,3 @@ class Categoria:
                 return False
             contador += 1
         return True
-
-    def esComentario1(cadena):
-        if cadena.startswith("#"):
-            return True
-        elif cadena.startswith("/") and cadena.endswith("/"):
-            contenidoBloque = cadena[1:-1]
-            return "/" not in contenidoBloque
-        else:
-            return False
-
-
