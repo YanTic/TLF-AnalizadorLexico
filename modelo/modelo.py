@@ -229,51 +229,31 @@ def reconocer_hexadecimal(caracter, palabra_actual, categoria):
 
 
 def reconocer_palabras_reservadas(caracter, palabra_actual, categoria):
-    # ^ (SI ∪ FUNC ∪ ENT ∪ VAR ∪ CAD ∪ BOOL)
-    if caracter == "^" and categoria == Categoria.NO_RECONOCIDO:
+    transiciones = {
+        '^': {'S': '^S', 'F': '^F', 'E': '^E', 'V': '^V', 'C': '^C', 'B': '^B'},
+        '^S': {'I': '^SI'},
+        '^F': {'U': '^FU'},
+        '^FU': {'N': '^FUN'},
+        '^FUN': {'C': '^FUNC'},
+        '^E': {'N': '^EN'},
+        '^V': {'A': '^VA'},
+        '^VA': {'R': '^VAR'},
+        '^C': {'A': '^CA'},
+        '^CA': {'D': '^CAD'},
+        '^B': {'O': '^BO'},
+        '^BO': {'O': '^BOO'},
+        '^BOO': {'L': '^BOOL'}
+    }
+
+    if caracter == '^' and categoria == Categoria.NO_RECONOCIDO:
         palabra_actual += caracter
         return True, palabra_actual, Categoria.PALABRA_RESERVADA
-    if categoria == Categoria.PALABRA_RESERVADA:
-        if palabra_actual == "^" and (caracter == "S" or caracter == "F" or caracter == "E" or caracter == "V" or
-                                      caracter == "C" or caracter == "B"):
-            palabra_actual += caracter
+
+    if categoria == Categoria.PALABRA_RESERVADA and palabra_actual in transiciones:
+        if caracter in transiciones[palabra_actual]:
+            palabra_actual = transiciones[palabra_actual][caracter]
             return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^S" and caracter == "I":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^F" and caracter == "U":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^FU" and caracter == "N":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^FUN" and caracter == "C":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^E" and caracter == "N":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^V" and caracter == "A":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^VA" and caracter == "R":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^C" and caracter == "A":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^CA" and caracter == "D":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^B" and caracter == "O":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^BO" and caracter == "O":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
-        if palabra_actual == "^BOO" and caracter == "L":
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.PALABRA_RESERVADA
+
     return False, palabra_actual, categoria
 
 
