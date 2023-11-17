@@ -1,7 +1,6 @@
 import tkinter as tk
 
 
-# controlador.py
 class Controlador:
     def __init__(self, modelo, vista):
         self.modelo = modelo
@@ -9,9 +8,12 @@ class Controlador:
 
     def analizar_codigo(self):
         codigo = self.vista.area_codigo.get("1.0", tk.END)
-        self.modelo.establecer_codigo(codigo)
+        if codigo.isspace():  # Verify if the code is blank
+            table = "The code is empty."
+        else:
+            self.modelo.establecer_codigo(codigo)
+            self.modelo.analizar()
+            results = self.modelo.tokens_a_string()
+            table = "Lexeme | Category | Position\n" + results
 
-        # Lógica del analizador léxico (simplificada)
-        resultados = "Ejemplo de resultado:\nLexema | Categoría | Posición\nif     | Palabra Reservada | 1-2\n"
-
-        self.vista.actualizar_resultados(resultados)
+        self.vista.actualizar_resultados(table)
