@@ -16,9 +16,39 @@ class Categoria:
                 return False
         return True
 
+    def esIdentificador(cadena):
+        contador = 0
+        caracteres = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q",
+                      "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i",
+                      "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z", "0",
+                      "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        numeros = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+        for i in range(len(cadena)):
+            esDigito = False
+            if contador >= 10:
+                return False
+            for j in range(10):
+                if cadena[0] == numeros[j]:
+                    return False
+            for j in range(len(caracteres)):
+                if cadena[i] == caracteres[j]:
+                    esDigito = True
+                    break
+            if not esDigito:
+                return False
+            contador += 1
+        return True
+
     def esPalabraReservada(cadena):
         opc = 0
+        yap = False
         caracterActual = cadena[0]
+
+        if not (caracterActual == '^'):
+            return False
+
+        caracterActual = cadena[1]
         if caracterActual == 'S':
             opc = 0
         elif caracterActual == 'F':
@@ -34,53 +64,54 @@ class Categoria:
         else:
             return False
 
-        for i in range(1, len(cadena)):
+        for i in range(2, len(cadena)):
             caracterActual = cadena[i]
             if opc == 0:
-                if caracterActual == 'I' and i == len(cadena) -1:
-                    return True
+                if caracterActual == 'I':
+                    yap = True
                 else:
                     return False
-            elif opc == 1:
-                if i == 1 and caracterActual == 'U':
+            if opc == 1:
+                if i == 2 and caracterActual == 'U':
                     continue
-                elif i == 2 and caracterActual == 'N':
+                if i == 3 and caracterActual == 'N':
                     continue
-                elif i == 3 and caracterActual == 'C' and i == len(cadena) -1:
-                    return True
+                if i == 4 and caracterActual == 'C':
+                    yap = True
                 else:
                     return False
-            elif opc == 2:
-                if i == 1 and caracterActual == 'N':
+            if opc == 2:
+                if i == 2 and caracterActual == 'N':
                     continue
-                elif i == 2 and caracterActual == 'T' and i == len(cadena) -1:
-                    return True
+                if i == 3 and caracterActual == 'T':
+                    yap = True
                 else:
                     return False
-            elif opc == 3:
-                if i == 1 and caracterActual == 'A':
+            if opc == 3:
+                if i == 2 and caracterActual == 'A':
                     continue
-                elif i == 2 and caracterActual == 'R' and i == len(cadena) -1:
-                    return True
+                if i == 3 and caracterActual == 'R':
+                    yap = True
                 else:
                     return False
-            elif opc == 4:
-                if i == 1 and caracterActual == 'A':
+            if opc == 4:
+                if i == 2 and caracterActual == 'A':
                     continue
-                elif i == 2 and caracterActual == 'D' and i == len(cadena) -1:
-                    return True
+                if i == 3 and caracterActual == 'D':
+                    yap = True
                 else:
                     return False
-            elif opc == 5:
-                if i == 1 and caracterActual == 'O':
+            if opc == 5:
+                if i == 2 and caracterActual == 'O':
                     continue
-                elif i == 2 and caracterActual == 'O':
+                if i == 3 and caracterActual == 'O':
                     continue
-                elif i == 3 and caracterActual == 'L' and i == len(cadena) -1:
-                    return True
+                if i == 4 and caracterActual == 'L':
+                    yap = True
                 else:
                     return False
-
+        if yap == True:
+            return True
         return False
 
     def esOperadorLogico(cadena):
@@ -100,19 +131,19 @@ class Categoria:
             if opc == 0:
                 if i == 1 and caracterActual == 'N':
                     continue
-                if i == 2 and caracterActual == 'D' and i == len(cadena) -1:
+                if i == 2 and caracterActual == 'D' and i == len(cadena) - 1:
                     return True
                 else:
                     return False
             if opc == 1:
-                if i == 1 and caracterActual == 'R' and i == len(cadena) -1:
+                if i == 1 and caracterActual == 'R' and i == len(cadena) - 1:
                     return True
                 else:
                     return False
             if opc == 2:
                 if i == 1 and caracterActual == 'O':
                     continue
-                if i == 2 and caracterActual == 'T' and i == len(cadena) -1:
+                if i == 2 and caracterActual == 'T' and i == len(cadena) - 1:
                     return True
                 else:
                     return False
@@ -224,7 +255,7 @@ class Categoria:
 
     def esCadena(cadena):
         if cadena[0] == '1' and cadena[-1] == '1':
-            for i in range(1, len(cadena)-1):
+            for i in range(1, len(cadena) - 1):
                 if cadena[i] == '1':
                     return False
             return True
@@ -276,9 +307,9 @@ class Categoria:
     def esIdentificador(cadena):
         contador = 0
         caracteres = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q",
-                      "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
-                      "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z", "-", "0", "1", "2", "3", "4", "5",
-                      "6", "7", "8", "9"]
+                      "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i",
+                      "j", "k", "l", "m", "n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z", "-",
+                      "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         reservadas2 = ["SI"]
         reservadas3 = ["ENT", "VAR", "CAD"]
         reservadas4 = ["BOOL", "FUNC"]
@@ -306,6 +337,3 @@ class Categoria:
                 return False
             contador += 1
         return True
-
-
-
