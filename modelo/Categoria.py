@@ -115,39 +115,13 @@ class Categoria:
         return False
 
     def esOperadorLogico(cadena):
-        opc = 0
-        caracterActual = cadena[0]
-        if caracterActual == 'A':
-            opc = 0
-        elif caracterActual == 'O':
-            opc = 1
-        elif caracterActual == 'N':
-            opc = 2
-        else:
-            return False
-
-        for i in range(1, len(cadena)):
-            caracterActual = cadena[i]
-            if opc == 0:
-                if i == 1 and caracterActual == 'N':
-                    continue
-                if i == 2 and caracterActual == 'D' and i == len(cadena) - 1:
-                    return True
-                else:
-                    return False
-            if opc == 1:
-                if i == 1 and caracterActual == 'R' and i == len(cadena) - 1:
-                    return True
-                else:
-                    return False
-            if opc == 2:
-                if i == 1 and caracterActual == 'O':
-                    continue
-                if i == 2 and caracterActual == 'T' and i == len(cadena) - 1:
-                    return True
-                else:
-                    return False
-
+        if len(cadena) == 1 and cadena[0] == '!':
+            return True
+        elif len(cadena) == 2:
+            if cadena[0] == '&' and cadena[1] == '&':
+                return True
+            if cadena[0] == '|' and cadena[1] == '|':
+                return True
         return False
 
     def esOperadorAritmetico(cadena):
@@ -236,19 +210,17 @@ class Categoria:
             return True
         return False
 
-    def esHexadecimal(cadena):
-        hexadecimal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
-        entero = 0
-        for i in range(len(cadena)):
+        def esHexadecimal(cadena):
+            hexadecimal = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+        if not (cadena[0] == '#'):
+            return False
+        for i in range(1, len(cadena)):
             caracterActual = cadena[i]
             esHexadecimal = False
             for valor in hexadecimal:
-                if entero >= 2:
-                    return False
                 if caracterActual == valor:
                     esHexadecimal = True
                     break
-            entero += 1
             if not esHexadecimal:
                 return False
         return True
@@ -337,3 +309,14 @@ class Categoria:
                 return False
             contador += 1
         return True
+
+    def esComentario1(cadena):
+        if cadena.startswith("#"):
+            return True
+        elif cadena.startswith("/") and cadena.endswith("/"):
+            contenidoBloque = cadena[1:-1]
+            return "/" not in contenidoBloque
+        else:
+            return False
+
+
