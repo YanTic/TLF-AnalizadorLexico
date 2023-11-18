@@ -244,6 +244,7 @@ def reconocer_palabras_reservadas(caracter, palabra_actual, categoria):
         '^FU': {'N': '^FUN'},
         '^FUN': {'C': '^FUNC'},
         '^E': {'N': '^EN'},
+        '^EN': {'T': '^ENT'},
         '^V': {'A': '^VA'},
         '^VA': {'R': '^VAR'},
         '^C': {'A': '^CA'},
