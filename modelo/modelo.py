@@ -1,5 +1,5 @@
 import re
-
+from enum import Enum
 
 RE_NUEVA_LINEA = r"\n+"  # Constante para la expresión regular que elimina las líneas vacías
 
@@ -123,27 +123,35 @@ def reconocer_cadenas(caracter, palabra_actual, categoria):
     return False, palabra_actual, categoria
 
 
-def reconocer_llaves(caracter, palabra_actual, categoria):
+def reconocer_llave_apertura(caracter, palabra_actual, categoria):
     if caracter == "{":
         if categoria == Categoria.NO_RECONOCIDO:
             palabra_actual += caracter
-            return True, palabra_actual, Categoria.LLAVES
-    if caracter == "}":
-        if categoria == Categoria.NO_RECONOCIDO:
-            palabra_actual += caracter
-            return True, palabra_actual, Categoria.LLAVES
+            return True, palabra_actual, Categoria.LLAVES_APERTURA
     return False, palabra_actual, categoria
 
 
-def reconocer_parentesis(caracter, palabra_actual, categoria):
+def reconocer_llave_cierre(caracter, palabra_actual, categoria):
+    if caracter == "}":
+        if categoria == Categoria.NO_RECONOCIDO:
+            palabra_actual += caracter
+            return True, palabra_actual, Categoria.LLAVES_CIERRE
+    return False, palabra_actual, categoria
+
+
+def reconocer_parentesis_apertura(caracter, palabra_actual, categoria):
     if caracter == "(":
         if categoria == Categoria.NO_RECONOCIDO:
             palabra_actual += caracter
-            return True, palabra_actual, Categoria.PARENTESIS
+            return True, palabra_actual, Categoria.PARENTESIS_APERTURA
+    return False, palabra_actual, categoria
+
+
+def reconocer_parentesis_cierre(caracter, palabra_actual, categoria):
     if caracter == ")":
         if categoria == Categoria.NO_RECONOCIDO:
             palabra_actual += caracter
-            return True, palabra_actual, Categoria.PARENTESIS
+            return True, palabra_actual, Categoria.PARENTESIS_CIERRE
     return False, palabra_actual, categoria
 
 
@@ -343,13 +351,27 @@ class AnalizadorLexico:
                 columna += 1
                 continue
 
-            resultado, palabra_actual, categoria = reconocer_llaves(caracter_actual, palabra_actual, categoria)
+            resultado, palabra_actual, categoria = reconocer_llave_apertura(caracter_actual, palabra_actual, categoria)
             if resultado:
                 i += 1
                 columna += 1
                 continue
 
-            resultado, palabra_actual, categoria = reconocer_parentesis(caracter_actual, palabra_actual, categoria)
+            resultado, palabra_actual, categoria = reconocer_llave_cierre(caracter_actual, palabra_actual, categoria)
+            if resultado:
+                i += 1
+                columna += 1
+                continue
+
+            resultado, palabra_actual, categoria = reconocer_parentesis_apertura(caracter_actual, palabra_actual,
+                                                                                 categoria)
+            if resultado:
+                i += 1
+                columna += 1
+                continue
+
+            resultado, palabra_actual, categoria = reconocer_parentesis_cierre(caracter_actual, palabra_actual,
+                                                                               categoria)
             if resultado:
                 i += 1
                 columna += 1
@@ -428,8 +450,9 @@ class AnalizadorLexico:
         Retorna:
         cadena -- la cadena que contiene la información de los tokens
         """
-        return "\n".join(f"{token.palabra} | {token.categoria} | {token.position[0]}-{token.position[1]}" for token in
-                         self.lista_tokens)
+        return "\n".join(
+            f"{token.palabra} | {token.categoria.name} | {token.position[0]}-{token.position[1]}" for token in
+            self.lista_tokens)
 
 
 class Token:
@@ -447,7 +470,7 @@ class Token:
         self.position = posicion
 
 
-class Categoria:
+class Categoria(Enum):
     """Clase que representa las posibles categorías de los tokens de un lenguaje de programación."""
 
     NO_RECONOCIDO = 1  # IMPLEMENTED
@@ -461,11 +484,13 @@ class Categoria:
     OPERADOR_ASIGNACION = 9  # IMPLEMENTED
     OPERADOR_INCREMENTO = 10  # IMPLEMENTED
     OPERADOR_DECREMENTO = 11  # IMPLEMENTED
-    PARENTESIS = 12  # IMPLEMENTED
-    LLAVES = 13  # IMPLEMENTED
-    TERMINAL = 14  # IMPLEMENTED
-    SEPARADOR = 15  # IMPLEMENTED
-    HEXADECIMAL = 16 # IMPLEMENTED
-    CADENA_CARACTERES = 17  # IMPLEMENTED
-    COMENTARIO_LINEA = 18  # IMPLEMENTED
-    COMENTARIO_BLOQUE = 19  # IMPLEMENTED
+    PARENTESIS_APERTURA = 12  # IMPLEMENTED
+    PARENTESIS_CIERRE = 13  # IMPLEMENTED
+    LLAVES_APERTURA = 14  # IMPLEMENTED
+    LLAVES_CIERRE = 15  # IMPLEMENTED
+    TERMINAL = 16  # IMPLEMENTED
+    SEPARADOR = 17  # IMPLEMENTED
+    HEXADECIMAL = 18  # IMPLEMENTED
+    CADENA_CARACTERES = 19  # IMPLEMENTED
+    COMENTARIO_LINEA = 20  # IMPLEMENTED
+    COMENTARIO_BLOQUE = 21  # IMPLEMENTED
