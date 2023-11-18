@@ -1,7 +1,7 @@
 import re
 from enum import Enum
 
-RE_NUEVA_LINEA = r"\n+"  # Constante para la expresión regular que elimina las líneas vacías
+RE_NUEVA_LINEA = r"[\n\t]+"  # Constante para la expresión regular que elimina las líneas vacías y tabulaciones
 
 
 def normalizar_cadena(cadena):
@@ -127,7 +127,7 @@ def reconocer_llave_apertura(caracter, palabra_actual, categoria):
     if caracter == "{":
         if categoria == Categoria.NO_RECONOCIDO:
             palabra_actual += caracter
-            return True, palabra_actual, Categoria.LLAVES_APERTURA
+            return True, palabra_actual, Categoria.LLAVE_APERTURA
     return False, palabra_actual, categoria
 
 
@@ -135,7 +135,7 @@ def reconocer_llave_cierre(caracter, palabra_actual, categoria):
     if caracter == "}":
         if categoria == Categoria.NO_RECONOCIDO:
             palabra_actual += caracter
-            return True, palabra_actual, Categoria.LLAVES_CIERRE
+            return True, palabra_actual, Categoria.LLAVE_CIERRE
     return False, palabra_actual, categoria
 
 
@@ -486,8 +486,8 @@ class Categoria(Enum):
     OPERADOR_DECREMENTO = 11  # IMPLEMENTED
     PARENTESIS_APERTURA = 12  # IMPLEMENTED
     PARENTESIS_CIERRE = 13  # IMPLEMENTED
-    LLAVES_APERTURA = 14  # IMPLEMENTED
-    LLAVES_CIERRE = 15  # IMPLEMENTED
+    LLAVE_APERTURA = 14  # IMPLEMENTED
+    LLAVE_CIERRE = 15  # IMPLEMENTED
     TERMINAL = 16  # IMPLEMENTED
     SEPARADOR = 17  # IMPLEMENTED
     HEXADECIMAL = 18  # IMPLEMENTED
